@@ -68,6 +68,7 @@ body.auth-open .account-widget {
 }
 
 .account-widget {
+  --account-box-width: 170px;
   position: fixed;
   top: 60px;
   left: max(10px, calc((100vw - 1100px) / 4 + 10px));
@@ -80,7 +81,9 @@ body.auth-open .account-widget {
   overflow: hidden;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  width: var(--account-box-width);
   border: 1px solid rgba(56, 189, 248, 0.42);
   border-radius: 12px;
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.9));
@@ -157,7 +160,7 @@ body.auth-open .account-widget {
   margin-top: 8px;
   display: flex;
   flex-direction: column;
-  min-width: 170px;
+  width: var(--account-box-width);
   border: 1px solid rgba(56, 189, 248, 0.35);
   border-radius: 12px;
   overflow: hidden;
@@ -805,13 +808,10 @@ footer {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .account-widget {
+    --account-box-width: 150px;
     left: 12px;
     top: 12px;
     transform: none;
-  }
-
-  .account-menu {
-    min-width: 150px;
   }
 
   .hero {
