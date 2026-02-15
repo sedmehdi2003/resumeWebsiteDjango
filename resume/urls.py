@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from resumeApp import views
+from django.views.generic import RedirectView
+from home import views
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("", RedirectView.as_view(pattern_name="home", permanent=False)),
+    path("home/", views.home, name="home"),
     path("admin/", admin.site.urls),
 ]
