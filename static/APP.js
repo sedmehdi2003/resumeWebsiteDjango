@@ -132,14 +132,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const registerPassword = document.getElementById('registerPassword');
   const registerRepeatPassword = document.getElementById('registerRepeatPassword');
 
-  let selectedOrderCountry = DEFAULT_COUNTRY;
-  let selectedLoginCountry = DEFAULT_COUNTRY;
-  let selectedRegisterCountry = DEFAULT_COUNTRY;
+  const COUNTRY_KEYS = ['order', 'login', 'register'];
+  const selectedCountries = {
+    order: DEFAULT_COUNTRY,
+    login: DEFAULT_COUNTRY,
+    register: DEFAULT_COUNTRY,
+  };
   let didEnter = false;
   const countryJumpState = {
     order: { key: '', index: -1 },
     login: { key: '', index: -1 },
     register: { key: '', index: -1 },
+  };
+  const countryControls = {
+    order: {
+      button: orderCountryBtn,
+      text: orderCountryText,
+      list: orderCountryList,
+      phoneInput: orderPhoneInput,
+      codeInput: orderCountryCodeInput,
+      enforce: () => true,
+    },
+    login: {
+      button: loginCountryBtn,
+      text: loginCountryText,
+      list: loginCountryList,
+      phoneInput: loginPhoneInput,
+      codeInput: loginCountryCodeInput,
+      enforce: () => loginUsesPhone,
+    },
+    register: {
+      button: registerCountryBtn,
+      text: registerCountryText,
+      list: registerCountryList,
+      phoneInput: registerPhoneInput,
+      codeInput: registerCountryCodeInput,
+      enforce: () => true,
+    },
   };
   let loginUsesPhone = false;
   let loginPhoneCodeStep = false;
@@ -204,83 +233,79 @@ document.addEventListener('DOMContentLoaded', () => {
     countryJumpState[listKey].index = -1;
   }
 
-  function closeOrderCountryList() {
-    orderCountryList.hidden = true;
-    orderCountryBtn.setAttribute('aria-expanded', 'false');
-    resetCountryJumpState('order');
-  }
-
-  function closeLoginCountryList() {
-    loginCountryList.hidden = true;
-    loginCountryBtn.setAttribute('aria-expanded', 'false');
-    resetCountryJumpState('login');
-  }
-
-  function closeRegisterCountryList() {
-    registerCountryList.hidden = true;
-    registerCountryBtn.setAttribute('aria-expanded', 'false');
-    resetCountryJumpState('register');
+  function closeCountryList(listKey) {
+    const control = countryControls[listKey];
+    control.list.hidden = true;
+    control.button.setAttribute('aria-expanded', 'false');
+    resetCountryJumpState(listKey);
   }
 
   function closeOtherCountryLists(except) {
-    if (except !== 'order') closeOrderCountryList();
-    if (except !== 'login') closeLoginCountryList();
-    if (except !== 'register') closeRegisterCountryList();
+    COUNTRY_KEYS.forEach(listKey => {
+      if (listKey !== except) closeCountryList(listKey);
+    });
   }
 
-  function toggleCountryList(listElement, buttonElement, keyName) {
-    const isOpen = !listElement.hidden;
-    closeOtherCountryLists(keyName);
-    listElement.hidden = isOpen;
-    buttonElement.setAttribute('aria-expanded', String(!isOpen));
-  }
-
-  function setOrderCountry(countryData) {
-    selectedOrderCountry = countryData;
-    applyCountryToInput(
-      countryData,
-      orderCountryText,
-      orderCountryCodeInput,
-      orderPhoneInput,
-      validateOrderPhone
-    );
-  }
-
-  function isOrderPhoneValid() {
-    const pattern = new RegExp(`^\\d{${selectedOrderCountry.length}}$`);
-    return pattern.test(orderPhoneInput.value);
-  }
-
-  function validateOrderPhone() {
-    sanitizePhoneInput(orderPhoneInput, selectedOrderCountry.length);
-    if (orderPhoneInput.value.length > 0 && !isOrderPhoneValid()) {
-      orderPhoneInput.setCustomValidity(
-        `Enter ${selectedOrderCountry.length} digits for ${selectedOrderCountry.name} (${selectedOrderCountry.code}).`
-      );
-    } else {
-      orderPhoneInput.setCustomValidity('');
-    }
-  }
-
-  function selectOrderCountryOption(optionElement) {
-    setOrderCountry(getCountryDataFromOption(optionElement));
-    closeOrderCountryList();
+  function getCountryControlByKey(listKey) {
+    return countryControls[listKey];
   }
 
   function getCountryListByKey(listKey) {
-    if (listKey === 'order') return orderCountryList;
-    if (listKey === 'login') return loginCountryList;
-    return registerCountryList;
+    return getCountryControlByKey(listKey).list;
+  }
+
+  function toggleCountryList(listKey) {
+    const control = getCountryControlByKey(listKey);
+    const isOpen = !control.list.hidden;
+    closeOtherCountryLists(listKey);
+    control.list.hidden = isOpen;
+    control.button.setAttribute('aria-expanded', String(!isOpen));
+  }
+
+  function getSelectedCountryByKey(listKey) {
+    return selectedCountries[listKey];
+  }
+
+  function setCountryByKey(listKey, countryData) {
+    const control = getCountryControlByKey(listKey);
+    selectedCountries[listKey] = countryData;
+    applyCountryToInput(
+      countryData,
+      control.text,
+      control.codeInput,
+      control.phoneInput,
+      () => validatePhoneByKey(listKey)
+    );
+  }
+
+  function isPhoneValidByKey(listKey) {
+    const control = getCountryControlByKey(listKey);
+    const selectedCountry = getSelectedCountryByKey(listKey);
+    const pattern = new RegExp(`^\\d{${selectedCountry.length}}$`);
+    return pattern.test(control.phoneInput.value);
+  }
+
+  function validatePhoneByKey(listKey) {
+    const control = getCountryControlByKey(listKey);
+    const selectedCountry = getSelectedCountryByKey(listKey);
+    sanitizePhoneInput(control.phoneInput, selectedCountry.length);
+
+    if (control.enforce() && control.phoneInput.value.length > 0 && !isPhoneValidByKey(listKey)) {
+      control.phoneInput.setCustomValidity(
+        `Enter ${selectedCountry.length} digits for ${selectedCountry.name} (${selectedCountry.code}).`
+      );
+    } else {
+      control.phoneInput.setCustomValidity('');
+    }
+  }
+
+  function selectCountryOptionByKey(listKey, optionElement) {
+    setCountryByKey(listKey, getCountryDataFromOption(optionElement));
+    closeCountryList(listKey);
   }
 
   function getCountryOptions(listElement) {
     return Array.from(listElement.querySelectorAll('.country-option'));
-  }
-
-  function getSelectedCountryByKey(listKey) {
-    if (listKey === 'order') return selectedOrderCountry;
-    if (listKey === 'login') return selectedLoginCountry;
-    return selectedRegisterCountry;
   }
 
   function focusCountryOptionByIndex(listElement, index) {
@@ -332,88 +357,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getOpenCountryListKey() {
-    if (!orderCountryList.hidden) return 'order';
-    if (!loginCountryList.hidden) return 'login';
-    if (!registerCountryList.hidden) return 'register';
+    for (const listKey of COUNTRY_KEYS) {
+      if (!getCountryListByKey(listKey).hidden) return listKey;
+    }
     return '';
   }
 
   function selectCountryOptionByListKey(listKey, optionElement) {
-    if (listKey === 'order') {
-      selectOrderCountryOption(optionElement);
-      return;
-    }
-
-    if (listKey === 'login') {
-      selectLoginCountryOption(optionElement);
-      return;
-    }
-
-    selectRegisterCountryOption(optionElement);
-  }
-
-  function setLoginCountry(countryData) {
-    selectedLoginCountry = countryData;
-    applyCountryToInput(
-      countryData,
-      loginCountryText,
-      loginCountryCodeInput,
-      loginPhoneInput,
-      validateLoginPhone
-    );
-  }
-
-  function isLoginPhoneValid() {
-    const pattern = new RegExp(`^\\d{${selectedLoginCountry.length}}$`);
-    return pattern.test(loginPhoneInput.value);
-  }
-
-  function validateLoginPhone() {
-    sanitizePhoneInput(loginPhoneInput, selectedLoginCountry.length);
-    if (loginUsesPhone && loginPhoneInput.value.length > 0 && !isLoginPhoneValid()) {
-      loginPhoneInput.setCustomValidity(
-        `Enter ${selectedLoginCountry.length} digits for ${selectedLoginCountry.name} (${selectedLoginCountry.code}).`
-      );
-    } else {
-      loginPhoneInput.setCustomValidity('');
-    }
-  }
-
-  function selectLoginCountryOption(optionElement) {
-    setLoginCountry(getCountryDataFromOption(optionElement));
-    closeLoginCountryList();
-  }
-
-  function setRegisterCountry(countryData) {
-    selectedRegisterCountry = countryData;
-    applyCountryToInput(
-      countryData,
-      registerCountryText,
-      registerCountryCodeInput,
-      registerPhoneInput,
-      validateRegisterPhone
-    );
-  }
-
-  function isRegisterPhoneValid() {
-    const pattern = new RegExp(`^\\d{${selectedRegisterCountry.length}}$`);
-    return pattern.test(registerPhoneInput.value);
-  }
-
-  function validateRegisterPhone() {
-    sanitizePhoneInput(registerPhoneInput, selectedRegisterCountry.length);
-    if (registerPhoneInput.value.length > 0 && !isRegisterPhoneValid()) {
-      registerPhoneInput.setCustomValidity(
-        `Enter ${selectedRegisterCountry.length} digits for ${selectedRegisterCountry.name} (${selectedRegisterCountry.code}).`
-      );
-    } else {
-      registerPhoneInput.setCustomValidity('');
-    }
-  }
-
-  function selectRegisterCountryOption(optionElement) {
-    setRegisterCountry(getCountryDataFromOption(optionElement));
-    closeRegisterCountryList();
+    selectCountryOptionByKey(listKey, optionElement);
   }
 
   function closeAccountMenu() {
@@ -512,14 +463,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function enterLoginPhoneCodeStep() {
+    const loginCountry = getSelectedCountryByKey('login');
     loginPhoneCodeStep = true;
-    closeLoginCountryList();
+    closeCountryList('login');
     loginCodeWrap.hidden = false;
     loginOtpCode.required = true;
     loginPhoneInput.readOnly = true;
     loginCountryBtn.disabled = true;
     loginSubmitBtn.textContent = 'Verify code';
-    loginFormMessage.textContent = `Code sent to ${selectedLoginCountry.code} ${loginPhoneInput.value}.`;
+    loginFormMessage.textContent = `Code sent to ${loginCountry.code} ${loginPhoneInput.value}.`;
     loginFormMessage.classList.add('success');
     loginOtpCode.focus();
     startLoginResendTimer();
@@ -536,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginModeToggle.textContent = usePhone ? 'Login with username' : 'Login with phone number';
     loginSubmitBtn.textContent = usePhone ? 'Send code' : 'Login';
     resetLoginPhoneCodeStep();
-    validateLoginPhone();
+    validatePhoneByKey('login');
   }
 
   function openAuthModal(mode) {
@@ -552,11 +504,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (mode === 'login') {
       loginForm.reset();
-      setLoginCountry(DEFAULT_COUNTRY);
+      setCountryByKey('login', DEFAULT_COUNTRY);
       setLoginMode(false);
     } else {
       registerForm.reset();
-      setRegisterCountry(DEFAULT_COUNTRY);
+      setCountryByKey('register', DEFAULT_COUNTRY);
       registerRepeatPassword.setCustomValidity('');
     }
   }
@@ -564,8 +516,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeAuthModal() {
     authOverlay.hidden = true;
     document.body.classList.remove('auth-open');
-    closeLoginCountryList();
-    closeRegisterCountryList();
+    closeCountryList('login');
+    closeCountryList('register');
     resetLoginPhoneCodeStep();
     loginFormMessage.classList.remove('success');
   }
@@ -604,53 +556,40 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', revealOnScroll);
   revealOnScroll();
 
-  buildCountryOptions(orderCountryList);
-  buildCountryOptions(loginCountryList);
-  buildCountryOptions(registerCountryList);
-  setOrderCountry(DEFAULT_COUNTRY);
-  setLoginCountry(DEFAULT_COUNTRY);
-  setRegisterCountry(DEFAULT_COUNTRY);
+  COUNTRY_KEYS.forEach(listKey => {
+    buildCountryOptions(getCountryListByKey(listKey));
+    setCountryByKey(listKey, DEFAULT_COUNTRY);
+  });
   setLoginMode(false);
 
   optionButtons.forEach(button => {
     button.addEventListener('click', () => {
+      const selectedChoice = (button.dataset.choice || '').trim().toLowerCase();
       document.body.classList.remove('page-locked');
       gate.classList.add('hidden');
       playEnterAnimation();
+
+      if (selectedChoice === 'ordering products' && orderForm) {
+        window.setTimeout(() => {
+          orderForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 250);
+      }
     });
   });
 
-  orderCountryBtn.addEventListener('click', event => {
-    event.stopPropagation();
-    toggleCountryList(orderCountryList, orderCountryBtn, 'order');
-  });
+  COUNTRY_KEYS.forEach(listKey => {
+    const control = getCountryControlByKey(listKey);
 
-  loginCountryBtn.addEventListener('click', event => {
-    event.stopPropagation();
-    toggleCountryList(loginCountryList, loginCountryBtn, 'login');
-  });
+    control.button.addEventListener('click', event => {
+      event.stopPropagation();
+      toggleCountryList(listKey);
+    });
 
-  registerCountryBtn.addEventListener('click', event => {
-    event.stopPropagation();
-    toggleCountryList(registerCountryList, registerCountryBtn, 'register');
-  });
-
-  orderCountryList.addEventListener('click', event => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement) || !target.classList.contains('country-option')) return;
-    selectOrderCountryOption(target);
-  });
-
-  loginCountryList.addEventListener('click', event => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement) || !target.classList.contains('country-option')) return;
-    selectLoginCountryOption(target);
-  });
-
-  registerCountryList.addEventListener('click', event => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement) || !target.classList.contains('country-option')) return;
-    selectRegisterCountryOption(target);
+    control.list.addEventListener('click', event => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement) || !target.classList.contains('country-option')) return;
+      selectCountryOptionByKey(listKey, target);
+    });
   });
 
   accountTrigger.addEventListener('click', event => {
@@ -683,26 +622,22 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   loginResendCodeBtn.addEventListener('click', () => {
+    const loginCountry = getSelectedCountryByKey('login');
     if (loginResendCodeBtn.disabled) return;
     startLoginResendTimer();
-    loginFormMessage.textContent = `A new code was sent to ${selectedLoginCountry.code} ${loginPhoneInput.value}.`;
+    loginFormMessage.textContent = `A new code was sent to ${loginCountry.code} ${loginPhoneInput.value}.`;
     loginFormMessage.classList.add('success');
   });
 
   document.addEventListener('click', event => {
     if (!(event.target instanceof Node)) return;
 
-    if (!orderCountryList.contains(event.target) && !orderCountryBtn.contains(event.target)) {
-      closeOrderCountryList();
-    }
-
-    if (!loginCountryList.contains(event.target) && !loginCountryBtn.contains(event.target)) {
-      closeLoginCountryList();
-    }
-
-    if (!registerCountryList.contains(event.target) && !registerCountryBtn.contains(event.target)) {
-      closeRegisterCountryList();
-    }
+    COUNTRY_KEYS.forEach(listKey => {
+      const control = getCountryControlByKey(listKey);
+      if (!control.list.contains(event.target) && !control.button.contains(event.target)) {
+        closeCountryList(listKey);
+      }
+    });
 
     if (!accountMenu.contains(event.target) && !accountTrigger.contains(event.target)) {
       closeAccountMenu();
@@ -751,18 +686,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  orderPhoneInput.addEventListener('input', validateOrderPhone);
-  loginPhoneInput.addEventListener('input', validateLoginPhone);
+  orderPhoneInput.addEventListener('input', () => validatePhoneByKey('order'));
+  loginPhoneInput.addEventListener('input', () => validatePhoneByKey('login'));
   loginOtpCode.addEventListener('input', validateLoginOtp);
-  registerPhoneInput.addEventListener('input', validateRegisterPhone);
+  registerPhoneInput.addEventListener('input', () => validatePhoneByKey('register'));
   registerPassword.addEventListener('input', validateRepeatPassword);
   registerRepeatPassword.addEventListener('input', validateRepeatPassword);
 
   orderForm.addEventListener('submit', event => {
     event.preventDefault();
-    validateOrderPhone();
+    validatePhoneByKey('order');
 
-    if (!isOrderPhoneValid()) {
+    if (!isPhoneValidByKey('order')) {
       orderPhoneInput.reportValidity();
       formMessage.textContent = 'Please enter a valid phone number for the selected country.';
       formMessage.classList.remove('success');
@@ -779,16 +714,16 @@ document.addEventListener('DOMContentLoaded', () => {
     formMessage.textContent = 'Order submitted successfully.';
     formMessage.classList.add('success');
     orderForm.reset();
-    setOrderCountry(DEFAULT_COUNTRY);
+    setCountryByKey('order', DEFAULT_COUNTRY);
   });
 
   loginForm.addEventListener('submit', event => {
     event.preventDefault();
 
     if (loginUsesPhone) {
-      validateLoginPhone();
+      validatePhoneByKey('login');
 
-      if (!isLoginPhoneValid()) {
+      if (!isPhoneValidByKey('login')) {
         loginPhoneInput.reportValidity();
         return;
       }
@@ -822,10 +757,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   registerForm.addEventListener('submit', event => {
     event.preventDefault();
-    validateRegisterPhone();
+    validatePhoneByKey('register');
     validateRepeatPassword();
 
-    if (!isRegisterPhoneValid()) {
+    if (!isPhoneValidByKey('register')) {
       registerPhoneInput.reportValidity();
       return;
     }

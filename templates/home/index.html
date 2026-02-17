@@ -229,12 +229,7 @@
           >
             <span id="countrySelectText">🇮🇷 +98 Iran</span>
           </button>
-          <ul id="countryList" class="country-list" role="listbox" hidden>
-            <li><button type="button" class="country-option" data-country="IR" data-flag="🇮🇷" data-code="+98" data-length="10">🇮🇷 +98 Iran</button></li>
-            <li><button type="button" class="country-option" data-country="US" data-flag="🇺🇸" data-code="+1" data-length="10">🇺🇸 +1 United States</button></li>
-            <li><button type="button" class="country-option" data-country="TR" data-flag="🇹🇷" data-code="+90" data-length="10">🇹🇷 +90 Turkey</button></li>
-            <li><button type="button" class="country-option" data-country="AE" data-flag="🇦🇪" data-code="+971" data-length="9">🇦🇪 +971 UAE</button></li>
-          </ul>
+          <ul id="countryList" class="country-list" role="listbox" hidden></ul>
           <input id="customerPhone" name="phonenumber" type="tel" inputmode="numeric" placeholder="Phone number" required />
           <input id="customerCountryCode" name="country_code" type="hidden" value="+98" />
         </div>
@@ -242,8 +237,8 @@
         <label for="productName">Product Title</label>
         <input id="productName" name="product_name" type="text" required />
 
-        <label for="productExplanation">Product explanation</label>
-        <textarea id="productExplanation" name="product_explanation" rows="5" required></textarea>
+        <label for="productExplanation">Product description</label>
+        <textarea id="productExplanation" name="product_explanation" rows="5" ></textarea>
 
         <label for="productFiles">Attachments (PDF, images, etc.)</label>
         <input
