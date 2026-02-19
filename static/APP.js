@@ -78,6 +78,131 @@ const PHONE_COUNTRIES = [
 
 const SORTED_PHONE_COUNTRIES = [...PHONE_COUNTRIES].sort((a, b) => Number(a.code.slice(1)) - Number(b.code.slice(1)));
 const DEFAULT_COUNTRY = PHONE_COUNTRIES.find(item => item.country === 'IR') || SORTED_PHONE_COUNTRIES[0];
+const LANG_STORAGE_KEY = 'resume_lang';
+const LANG_DEFAULT = 'en';
+const RTL_LANGS = new Set(['fa']);
+const I18N = {
+  en: {
+    'welcome.header': 'Language',
+    'welcome.question': 'Please choose your language.',
+    'welcome.persianOptionHtml': '<img class="flag-icon" src="https://flagcdn.com/24x18/ir.png" width="24" height="18" alt="Iran flag" /> Persian',
+    'welcome.englishOptionHtml': '<img class="flag-icon" src="https://flagcdn.com/24x18/us.png" width="24" height="18" alt="US flag" /> English',
+    'account.title': 'Account',
+    'auth.loginTitle': 'Login',
+    'auth.registerTitle': 'Register',
+    'auth.loginWithPhone': 'Login with phone number',
+    'auth.usernameLabel': 'Username',
+    'auth.firstNameLabel': 'First name',
+    'auth.lastNameLabel': 'Last name',
+    'auth.phoneLabel': 'Phone number',
+    'auth.emailRegisterLabel': 'Email register',
+    'auth.passwordLabel': 'Password',
+    'auth.repeatPasswordLabel': 'Repeat password',
+    'auth.verificationCodeLabel': 'Verification code',
+    'auth.resendCode': "I didn't receive code. Send it again.",
+    'auth.useAnotherPhone': 'Use another phone number',
+    'auth.passwordMismatch': 'Passwords do not match.',
+    'hero.badge': 'Back-End Developer',
+    'hero.titleHtml': "Hi, I'm <span>Amirmahdi</span>",
+    'hero.description': 'I build modern, performant web applications with clean code and strong attention to detail. Passionate about backend systems and scalable architecture.',
+    'profile.name': 'Amirmahdi Khalili',
+    'profile.focusLabel': 'Focus:',
+    'profile.focusValue': 'Backend Development',
+    'profile.locationLabel': 'Location:',
+    'profile.emailLabel': 'Email:',
+    'profile.githubLabel': 'GitHub:',
+    'sections.skills': 'Skills',
+    'sections.experience': 'Experience',
+    'sections.projects': 'Projects',
+    'sections.orderProduct': 'Order Product',
+    'experience.azadRole': 'Position: Designer',
+    'experience.freelanceRole': 'Position: Developer',
+    'projects.descriptionHtml': '<strong>Resume Website:</strong> A modern personal website.<br /><strong>Game Center Website:</strong> Gaming website for Reapers Game Center.<br /><strong>Telegram / Discord BOT:</strong> Many BOTs made.',
+    'order.nameLabel': 'Name',
+    'order.emailLabel': 'Email',
+    'order.phoneLabel': 'Phone number',
+    'order.productTitleLabel': 'Product Title',
+    'order.productDescriptionLabel': 'Product description',
+    'order.attachmentsLabel': 'Attachments (PDF, images, etc.)',
+    'order.uploadHint': 'You can upload one or more files.',
+    'order.submitButton': 'Send Order',
+    'order.invalidPhone': 'Please enter a valid phone number for the selected country.',
+    'order.invalidForm': 'Please complete all required fields correctly.',
+    'order.success': 'Order submitted successfully.',
+    'footer.copyright': '© 2026 Amirmahdi — Crafted with care',
+    'login.otpValidation': 'Enter the 6-digit code sent to your phone.',
+    'login.modeUsername': 'Login with username',
+    'login.modePhone': 'Login with phone number',
+    'login.sendCode': 'Send code',
+    'login.verifyCode': 'Verify code',
+    'login.codeSent': 'Code sent to {code} {phone}.',
+    'login.newCodeSent': 'A new code was sent to {code} {phone}.',
+    'login.enterOtpPlaceholder': 'Enter 6-digit code',
+  },
+  fa: {
+    'welcome.header': 'زبان',
+    'welcome.question': 'لطفا زبان خود را انتخاب کنید.',
+    'welcome.persianOptionHtml': '<img class="flag-icon" src="https://flagcdn.com/24x18/ir.png" width="24" height="18" alt="Iran flag" /> فارسی',
+    'welcome.englishOptionHtml': '<img class="flag-icon" src="https://flagcdn.com/24x18/us.png" width="24" height="18" alt="US flag" /> انگلیسی',
+    'account.title': 'حساب کاربری',
+    'auth.loginTitle': 'ورود',
+    'auth.registerTitle': 'ثبت‌نام',
+    'auth.loginWithPhone': 'ورود با شماره تلفن',
+    'auth.usernameLabel': 'نام کاربری',
+    'auth.firstNameLabel': 'نام',
+    'auth.lastNameLabel': 'نام خانوادگی',
+    'auth.phoneLabel': 'شماره تلفن',
+    'auth.emailRegisterLabel': 'ایمیل ثبت‌نام',
+    'auth.passwordLabel': 'رمز عبور',
+    'auth.repeatPasswordLabel': 'تکرار رمز عبور',
+    'auth.verificationCodeLabel': 'کد تایید',
+    'auth.resendCode': 'کدی دریافت نکردم. ارسال مجدد.',
+    'auth.useAnotherPhone': 'استفاده از شماره دیگر',
+    'auth.passwordMismatch': 'رمز عبور و تکرار آن یکسان نیست.',
+    'hero.badge': 'توسعه‌دهنده بک‌اند',
+    'hero.titleHtml': 'سلام، من <span>امیرمهدی</span> هستم',
+    'hero.description': 'من وب‌اپلیکیشن‌های مدرن و سریع با کدنویسی تمیز و توجه بالا به جزئیات می‌سازم. علاقه‌مند به سیستم‌های بک‌اند و معماری مقیاس‌پذیر.',
+    'profile.name': 'امیرمهدی خلیلی',
+    'profile.focusLabel': 'تمرکز:',
+    'profile.focusValue': 'توسعه بک‌اند',
+    'profile.locationLabel': 'موقعیت:',
+    'profile.emailLabel': 'ایمیل:',
+    'profile.githubLabel': 'گیت‌هاب:',
+    'sections.skills': 'مهارت‌ها',
+    'sections.experience': 'تجربه',
+    'sections.projects': 'پروژه‌ها',
+    'sections.orderProduct': 'سفارش پروژه',
+    'experience.azadRole': 'سمت: طراح',
+    'experience.freelanceRole': 'سمت: توسعه‌دهنده',
+    'projects.descriptionHtml': '<strong>وب‌سایت رزومه:</strong> یک وب‌سایت شخصی مدرن.<br /><strong>وب‌سایت گیم‌سنتر:</strong> وب‌سایت مخصوص Reapers Game Center.<br /><strong>ربات تلگرام / دیسکورد:</strong> ساخت ربات‌های متعدد.',
+    'order.nameLabel': 'نام',
+    'order.emailLabel': 'ایمیل',
+    'order.phoneLabel': 'شماره تلفن',
+    'order.productTitleLabel': 'عنوان پروژه',
+    'order.productDescriptionLabel': 'توضیحات پروژه',
+    'order.attachmentsLabel': 'فایل‌های ضمیمه (PDF، تصویر و ...)',
+    'order.uploadHint': 'می‌توانید یک یا چند فایل آپلود کنید.',
+    'order.submitButton': 'ارسال سفارش',
+    'order.invalidPhone': 'لطفا شماره تلفن معتبر برای کشور انتخاب‌شده وارد کنید.',
+    'order.invalidForm': 'لطفا همه فیلدهای لازم را درست تکمیل کنید.',
+    'order.success': 'سفارش با موفقیت ارسال شد.',
+    'footer.copyright': '© 2026 امیرمهدی — ساخته شده با دقت',
+    'login.otpValidation': 'کد ۶ رقمی ارسال‌شده به تلفن را وارد کنید.',
+    'login.modeUsername': 'ورود با نام کاربری',
+    'login.modePhone': 'ورود با شماره تلفن',
+    'login.sendCode': 'ارسال کد',
+    'login.verifyCode': 'تایید کد',
+    'login.codeSent': 'کد برای {code} {phone} ارسال شد.',
+    'login.newCodeSent': 'کد جدید برای {code} {phone} ارسال شد.',
+    'login.enterOtpPlaceholder': 'کد ۶ رقمی را وارد کنید',
+  },
+};
+
+function formatText(template, values) {
+  return template.replace(/\{(\w+)\}/g, (match, key) => (
+    Object.prototype.hasOwnProperty.call(values, key) ? String(values[key]) : match
+  ));
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('page-locked');
@@ -131,6 +256,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const registerCountryCodeInput = document.getElementById('registerCountryCode');
   const registerPassword = document.getElementById('registerPassword');
   const registerRepeatPassword = document.getElementById('registerRepeatPassword');
+  let currentLang = LANG_DEFAULT;
+
+  const translateTextNodes = document.querySelectorAll('[data-i18n]');
+  const translateHtmlNodes = document.querySelectorAll('[data-i18n-html]');
+
+  function t(key) {
+    const dictionary = I18N[currentLang] || I18N[LANG_DEFAULT];
+    const fallback = I18N[LANG_DEFAULT];
+    return dictionary[key] || fallback[key] || key;
+  }
+
+  function applyStaticTranslations() {
+    translateTextNodes.forEach(node => {
+      const key = node.getAttribute('data-i18n');
+      if (!key) return;
+      node.textContent = t(key);
+    });
+
+    translateHtmlNodes.forEach(node => {
+      const key = node.getAttribute('data-i18n-html');
+      if (!key) return;
+      node.innerHTML = t(key);
+    });
+  }
 
   const COUNTRY_KEYS = ['order', 'login', 'register'];
   const selectedCountries = {
@@ -174,6 +323,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let loginPhoneCodeStep = false;
   let loginResendSecondsLeft = 60;
   let loginResendIntervalId = null;
+
+  function applyLanguage(langCode) {
+    const normalized = Object.prototype.hasOwnProperty.call(I18N, langCode) ? langCode : LANG_DEFAULT;
+    currentLang = normalized;
+    window.localStorage.setItem(LANG_STORAGE_KEY, normalized);
+
+    document.documentElement.lang = normalized;
+    document.documentElement.dir = RTL_LANGS.has(normalized) ? 'rtl' : 'ltr';
+    document.body.classList.toggle('lang-fa', normalized === 'fa');
+
+    applyStaticTranslations();
+    syncLanguageDependentText();
+  }
 
   function revealOnScroll() {
     const windowHeight = window.innerHeight;
@@ -220,8 +382,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function getFlagIconMarkup(countryCode, countryName) {
+    if (!countryCode) return '';
+    const lowerCode = countryCode.toLowerCase();
+    return `<img class="flag-icon" src="https://flagcdn.com/24x18/${lowerCode}.png" width="24" height="18" alt="${countryName} flag" />`;
+  }
+
   function applyCountryToInput(countryData, textElement, codeElement, inputElement, validateFn) {
-    textElement.textContent = `${countryData.flag} ${countryData.code} ${countryData.name}`;
+    textElement.innerHTML = `${getFlagIconMarkup(countryData.country, countryData.name)} ${countryData.code} ${countryData.name}`;
     codeElement.value = countryData.code;
     inputElement.maxLength = countryData.length;
     inputElement.placeholder = `${countryData.length} digits`;
@@ -440,7 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function validateLoginOtp() {
     sanitizeLoginOtpInput();
     if (loginPhoneCodeStep && loginOtpCode.value.length > 0 && !isLoginOtpValid()) {
-      loginOtpCode.setCustomValidity('Enter the 6-digit code sent to your phone.');
+      loginOtpCode.setCustomValidity(t('login.otpValidation'));
     } else {
       loginOtpCode.setCustomValidity('');
     }
@@ -453,7 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginOtpCode.value = '';
     loginPhoneInput.readOnly = false;
     loginCountryBtn.disabled = false;
-    loginSubmitBtn.textContent = loginUsesPhone ? 'Send code' : 'Login';
+    loginSubmitBtn.textContent = loginUsesPhone ? t('login.sendCode') : t('auth.loginTitle');
     loginFormMessage.textContent = '';
     loginFormMessage.classList.remove('success');
     validateLoginOtp();
@@ -470,11 +638,22 @@ document.addEventListener('DOMContentLoaded', () => {
     loginOtpCode.required = true;
     loginPhoneInput.readOnly = true;
     loginCountryBtn.disabled = true;
-    loginSubmitBtn.textContent = 'Verify code';
-    loginFormMessage.textContent = `Code sent to ${loginCountry.code} ${loginPhoneInput.value}.`;
+    loginSubmitBtn.textContent = t('login.verifyCode');
+    loginFormMessage.textContent = formatText(t('login.codeSent'), {
+      code: loginCountry.code,
+      phone: loginPhoneInput.value,
+    });
     loginFormMessage.classList.add('success');
     loginOtpCode.focus();
     startLoginResendTimer();
+  }
+
+  function syncLanguageDependentText() {
+    loginOtpCode.placeholder = t('login.enterOtpPlaceholder');
+    loginModeToggle.textContent = loginUsesPhone ? t('login.modeUsername') : t('login.modePhone');
+    loginSubmitBtn.textContent = loginUsesPhone
+      ? (loginPhoneCodeStep ? t('login.verifyCode') : t('login.sendCode'))
+      : t('auth.loginTitle');
   }
 
   function setLoginMode(usePhone) {
@@ -485,8 +664,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loginUsername.required = !usePhone;
     loginPassword.required = !usePhone;
     loginPhoneInput.required = usePhone;
-    loginModeToggle.textContent = usePhone ? 'Login with username' : 'Login with phone number';
-    loginSubmitBtn.textContent = usePhone ? 'Send code' : 'Login';
+    loginModeToggle.textContent = usePhone ? t('login.modeUsername') : t('login.modePhone');
+    loginSubmitBtn.textContent = usePhone ? t('login.sendCode') : t('auth.loginTitle');
     resetLoginPhoneCodeStep();
     validatePhoneByKey('login');
   }
@@ -524,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function validateRepeatPassword() {
     if (registerRepeatPassword.value && registerRepeatPassword.value !== registerPassword.value) {
-      registerRepeatPassword.setCustomValidity('Passwords do not match.');
+      registerRepeatPassword.setCustomValidity(t('auth.passwordMismatch'));
     } else {
       registerRepeatPassword.setCustomValidity('');
     }
@@ -560,20 +739,23 @@ document.addEventListener('DOMContentLoaded', () => {
     buildCountryOptions(getCountryListByKey(listKey));
     setCountryByKey(listKey, DEFAULT_COUNTRY);
   });
+
+  const storedLang = window.localStorage.getItem(LANG_STORAGE_KEY);
+  if (storedLang && Object.prototype.hasOwnProperty.call(I18N, storedLang)) {
+    applyLanguage(storedLang);
+  } else {
+    applyLanguage(LANG_DEFAULT);
+  }
+
   setLoginMode(false);
 
   optionButtons.forEach(button => {
     button.addEventListener('click', () => {
-      const selectedChoice = (button.dataset.choice || '').trim().toLowerCase();
+      const selectedLang = (button.dataset.lang || LANG_DEFAULT).trim().toLowerCase();
+      applyLanguage(selectedLang);
       document.body.classList.remove('page-locked');
       gate.classList.add('hidden');
       playEnterAnimation();
-
-      if (selectedChoice === 'ordering products' && orderForm) {
-        window.setTimeout(() => {
-          orderForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 250);
-      }
     });
   });
 
@@ -625,7 +807,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginCountry = getSelectedCountryByKey('login');
     if (loginResendCodeBtn.disabled) return;
     startLoginResendTimer();
-    loginFormMessage.textContent = `A new code was sent to ${loginCountry.code} ${loginPhoneInput.value}.`;
+    loginFormMessage.textContent = formatText(t('login.newCodeSent'), {
+      code: loginCountry.code,
+      phone: loginPhoneInput.value,
+    });
     loginFormMessage.classList.add('success');
   });
 
@@ -699,19 +884,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isPhoneValidByKey('order')) {
       orderPhoneInput.reportValidity();
-      formMessage.textContent = 'Please enter a valid phone number for the selected country.';
+      formMessage.textContent = t('order.invalidPhone');
       formMessage.classList.remove('success');
       return;
     }
 
     if (!orderForm.checkValidity()) {
       orderForm.reportValidity();
-      formMessage.textContent = 'Please complete all required fields correctly.';
+      formMessage.textContent = t('order.invalidForm');
       formMessage.classList.remove('success');
       return;
     }
 
-    formMessage.textContent = 'Order submitted successfully.';
+    formMessage.textContent = t('order.success');
     formMessage.classList.add('success');
     orderForm.reset();
     setCountryByKey('order', DEFAULT_COUNTRY);

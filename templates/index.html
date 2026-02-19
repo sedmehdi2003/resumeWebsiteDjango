@@ -1,11 +1,11 @@
-﻿{% load static %}
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Amirmahdi Khalili</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'Style.css' %}">
     <script src="{% static 'APP.js' %}" defer></script>
 
@@ -13,11 +13,11 @@
 <body>
   <div id="welcomeGate" class="welcome-gate" role="dialog" aria-modal="true" aria-labelledby="welcomeHeader">
     <div class="welcome-card">
-      <h2 id="welcomeHeader" data-i18n="welcome.header">Language</h2>
-      <p class="welcome-question" data-i18n="welcome.question">Please choose your language.</p>
-      <div class="welcome-options" role="radiogroup" aria-label="Language options">
-        <button type="button" class="welcome-option" data-lang="fa" data-i18n-html="welcome.persianOptionHtml"><img class="flag-icon" src="https://flagcdn.com/24x18/ir.png" width="24" height="18" alt="Iran flag" /> Persian</button>
-        <button type="button" class="welcome-option" data-lang="en" data-i18n-html="welcome.englishOptionHtml"><img class="flag-icon" src="https://flagcdn.com/24x18/us.png" width="24" height="18" alt="US flag" /> English</button>
+      <h2 id="welcomeHeader">Welcom</h2>
+      <p class="welcome-question">why are you here?</p>
+      <div class="welcome-options" role="radiogroup" aria-label="Welcome options">
+        <button type="button" class="welcome-option" data-choice="Just for visit">Just for visit</button>
+        <button type="button" class="welcome-option" data-choice="Ordering products">Ordering products</button>
       </div>
     </div>
   </div>
@@ -30,13 +30,13 @@
       aria-haspopup="true"
       aria-expanded="false"
       aria-controls="accountMenu"
-    >
+    >-
       <span class="account-user-icon" aria-hidden="true"></span>
-      <span data-i18n="account.title">Account</span>
+      <span>Account</span>
     </button>
     <div id="accountMenu" class="account-menu" hidden>
-      <button type="button" class="account-menu-option" data-auth="login" data-i18n="auth.loginTitle">Login</button>
-      <button type="button" class="account-menu-option" data-auth="register" data-i18n="auth.registerTitle">Register</button>
+      <button type="button" class="account-menu-option" data-auth="login">Login</button>
+      <button type="button" class="account-menu-option" data-auth="register">Register</button>
     </div>
   </div>
 
@@ -44,9 +44,9 @@
     <!-- HERO -->
     <div class="hero">
       <div>
-        <div class="badge" data-i18n="hero.badge">Back-End Developer</div>
-        <h1 id="heroTitle" data-i18n-html="hero.titleHtml">Hi, I'm <span>Amirmahdi</span></h1>
-        <p data-i18n="hero.description">
+        <div class="badge">Back‑End Developer</div>
+        <h1>Hi, I'm <span>Amirmahdi</span></h1>
+        <p>
           I build modern, performant web applications with clean code and
           strong attention to detail. Passionate about backend systems and
           scalable architecture.
@@ -54,7 +54,7 @@
       </div>
 
       <div class="card profile-card">
-        <h3 class="profile-name" data-i18n="profile.name">Amirmahdi Khalili</h3>
+        <h3 class="profile-name">Amirmahdi Khalili</h3>
         <img
           class="profile-photo"
           src="{% static 'Images/photo24173357660_LE_upscale_prime_tone_enhance_30_color_enhance_30.jpg' %}"
@@ -62,11 +62,11 @@
         />
         <div class="profile-meta">
           <div class="profile-meta-row">
-            <strong class="profile-meta-label" data-i18n="profile.focusLabel">Focus:</strong>
-            <span class="profile-meta-value" data-i18n="profile.focusValue">Backend Development</span>
+            <strong class="profile-meta-label">Focus:</strong>
+            <span class="profile-meta-value">Backend Development</span>
           </div>
           <div class="profile-meta-row">
-            <strong class="profile-meta-label" data-i18n="profile.locationLabel">Location:</strong>
+            <strong class="profile-meta-label">Location:</strong>
             <span class="profile-meta-value">Remote / IRAN - Karaj</span>
           </div>
           <div class="profile-meta-row">
@@ -76,7 +76,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              <strong data-i18n="profile.emailLabel">Email:</strong>
+              <strong>Email:</strong>
             </a>
             <a
               class="github-link profile-meta-value"
@@ -94,7 +94,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              <strong data-i18n="profile.githubLabel">GitHub:</strong>
+              <strong>GitHub:</strong>
             </a>
             <a
               class="github-link profile-meta-value"
@@ -111,7 +111,7 @@
 
     <!-- SKILLS -->
     <section>
-      <h2 data-i18n="sections.skills">Skills</h2>
+      <h2>Skills</h2>
     <div class="skills">
   <div class="skill" data-rating="4.5">
     HTML
@@ -179,26 +179,26 @@
 
     <!-- EXPERIENCE -->
     <section>
-      <h2 data-i18n="sections.experience">Experience</h2>
+      <h2>Experience</h2>
       <div class="timeline">
         <div class="timeline-item">
           <h3>Azad Pack</h3>
           <span>2023 - 2024</span>
-          <p data-i18n="experience.azadRole">Position: Designer</p>
+          <p>Position: Designer</p>
         </div>
         <div class="timeline-item">
           <h3>Freelance BOT Developer</h3>
           <span>2025</span>
-          <p data-i18n="experience.freelanceRole">Position: Developer</p>
+          <p>Position: Developer</p>
         </div>
       </div>
     </section>
 
     <!-- PROJECTS -->
     <section>
-      <h2 data-i18n="sections.projects">Projects</h2>
+      <h2>Projects</h2>
       <div class="card">
-        <p id="projectsDescription" data-i18n-html="projects.descriptionHtml">
+        <p>
           <strong>Resume Website:</strong> A modern personal website.<br />
           <strong>Game Center Website:</strong> Gaming website for Reapers Game Center.<br />
           <strong>Telegram / Discord BOT:</strong> Many BOTs made.
@@ -209,15 +209,15 @@
 
     <!-- Order Product -->
     <section>
-      <h2 data-i18n="sections.orderProduct">Order Product</h2>
+      <h2>Order Product</h2>
       <form id="orderForm" class="order-form card" novalidate>
-        <label for="customerName" data-i18n="order.nameLabel">Name</label>
+        <label for="customerName">Name</label>
         <input id="customerName" name="name" type="text" required />
 
-        <label for="customerEmail" data-i18n="order.emailLabel">Email</label>
+        <label for="customerEmail">Email</label>
         <input id="customerEmail" name="email" type="email" required />
 
-        <label for="customerPhone" data-i18n="order.phoneLabel">Phone number</label>
+        <label for="customerPhone">Phone number</label>
         <div class="phone-field">
           <button
             id="countrySelectBtn"
@@ -227,20 +227,25 @@
             aria-expanded="false"
             aria-controls="countryList"
           >
-            <span id="countrySelectText"><img class="flag-icon" src="https://flagcdn.com/24x18/ir.png" width="24" height="18" alt="Iran flag" /> +98 Iran</span>
+            <span id="countrySelectText">🇮🇷 +98 Iran</span>
           </button>
-          <ul id="countryList" class="country-list" role="listbox" hidden></ul>
+          <ul id="countryList" class="country-list" role="listbox" hidden>
+            <li><button type="button" class="country-option" data-country="IR" data-flag="🇮🇷" data-code="+98" data-length="10">🇮🇷 +98 Iran</button></li>
+            <li><button type="button" class="country-option" data-country="US" data-flag="🇺🇸" data-code="+1" data-length="10">🇺🇸 +1 United States</button></li>
+            <li><button type="button" class="country-option" data-country="TR" data-flag="🇹🇷" data-code="+90" data-length="10">🇹🇷 +90 Turkey</button></li>
+            <li><button type="button" class="country-option" data-country="AE" data-flag="🇦🇪" data-code="+971" data-length="9">🇦🇪 +971 UAE</button></li>
+          </ul>
           <input id="customerPhone" name="phonenumber" type="tel" inputmode="numeric" placeholder="Phone number" required />
           <input id="customerCountryCode" name="country_code" type="hidden" value="+98" />
         </div>
 
-        <label for="productName" data-i18n="order.productTitleLabel">Product Title</label>
+        <label for="productName">Product Title</label>
         <input id="productName" name="product_name" type="text" required />
 
-        <label for="productExplanation" data-i18n="order.productDescriptionLabel">Product description</label>
-        <textarea id="productExplanation" name="product_explanation" rows="5" ></textarea>
+        <label for="productExplanation">Product explanation</label>
+        <textarea id="productExplanation" name="product_explanation" rows="5" required></textarea>
 
-        <label for="productFiles" data-i18n="order.attachmentsLabel">Attachments (PDF, images, etc.)</label>
+        <label for="productFiles">Attachments (PDF, images, etc.)</label>
         <input
           id="productFiles"
           name="product_files"
@@ -248,14 +253,14 @@
           multiple
           accept=".pdf,.png,.jpg,.jpeg,.webp,.gif,.doc,.docx,.txt,.zip"
         />
-        <p class="input-hint" data-i18n="order.uploadHint">You can upload one or more files.</p>
+        <p class="input-hint">You can upload one or more files.</p>
 
-        <button type="submit" class="order-submit" data-i18n="order.submitButton">Send Order</button>
+        <button type="submit" class="order-submit">Send Order</button>
         <p id="orderFormMessage" class="form-message" aria-live="polite"></p>
       </form>
     </section>
 
-    <footer data-i18n="footer.copyright">
+    <footer>
       © 2026 Amirmahdi — Crafted with care
     </footer>
   </div>
@@ -265,15 +270,15 @@
       <button type="button" id="authClose" class="auth-close" aria-label="Close">×</button>
 
       <section id="loginPanel" class="auth-panel" hidden>
-        <h3 id="authPanelTitle" data-i18n="auth.loginTitle">Login</h3>
+        <h3 id="authPanelTitle">Login</h3>
         <form id="loginForm" class="auth-form" novalidate>
           <div id="loginUsernameWrap">
-            <label for="loginUsername" data-i18n="auth.usernameLabel">Username</label>
+            <label for="loginUsername">Username</label>
             <input id="loginUsername" name="login_username" type="text" required />
           </div>
 
           <div id="loginPhoneWrap" hidden>
-            <label for="loginPhone" data-i18n="auth.phoneLabel">Phone number</label>
+            <label for="loginPhone">Phone number</label>
             <div class="phone-field">
               <button
                 id="loginCountryBtn"
@@ -283,7 +288,7 @@
                 aria-expanded="false"
                 aria-controls="loginCountryList"
               >
-                <span id="loginCountryText"><img class="flag-icon" src="https://flagcdn.com/24x18/ir.png" width="24" height="18" alt="Iran flag" /> +98 Iran</span>
+                <span id="loginCountryText">🇮🇷 +98 Iran</span>
               </button>
               <ul id="loginCountryList" class="country-list" role="listbox" hidden></ul>
               <input id="loginPhone" name="login_phone" type="tel" inputmode="numeric" placeholder="Phone number" />
@@ -292,12 +297,12 @@
           </div>
 
           <div id="loginPasswordWrap">
-            <label for="loginPassword" data-i18n="auth.passwordLabel">Password</label>
+            <label for="loginPassword">Password</label>
             <input id="loginPassword" name="login_password" type="password" required />
           </div>
 
           <div id="loginCodeWrap" hidden>
-            <label for="loginOtpCode" data-i18n="auth.verificationCodeLabel">Verification code</label>
+            <label for="loginOtpCode">Verification code</label>
             <input
               id="loginOtpCode"
               name="login_otp_code"
@@ -309,31 +314,31 @@
               placeholder="Enter 6-digit code"
             />
             <button type="button" id="loginResendCode" class="auth-switch-mode" disabled>
-              <span id="loginResendText" data-i18n="auth.resendCode">I didn't receive code. Send it again.</span> (<span id="loginResendTimer">01:00</span>)
+              I didn't receive code. Send it again. (<span id="loginResendTimer">01:00</span>)
             </button>
-            <button type="button" id="loginBackToPhone" class="auth-switch-mode" data-i18n="auth.useAnotherPhone">Use another phone number</button>
+            <button type="button" id="loginBackToPhone" class="auth-switch-mode">Use another phone number</button>
           </div>
 
           <p id="loginFormMessage" class="form-message" aria-live="polite"></p>
 
-          <button type="button" id="loginModeToggle" class="auth-switch-mode" data-i18n="auth.loginWithPhone">Login with phone number</button>
-          <button type="submit" id="loginSubmitBtn" class="order-submit" data-i18n="auth.loginTitle">Login</button>
+          <button type="button" id="loginModeToggle" class="auth-switch-mode">Login with phone number</button>
+          <button type="submit" id="loginSubmitBtn" class="order-submit">Login</button>
         </form>
       </section>
 
       <section id="registerPanel" class="auth-panel" hidden>
-        <h3 id="authPanelTitleRegister" data-i18n="auth.registerTitle">Register</h3>
+        <h3 id="authPanelTitleRegister">Register</h3>
         <form id="registerForm" class="auth-form" novalidate>
-          <label for="registerUsername" data-i18n="auth.usernameLabel">Username</label>
+          <label for="registerUsername">Username</label>
           <input id="registerUsername" name="register_username" type="text" required />
 
-          <label for="registerFirstName" data-i18n="auth.firstNameLabel">First name</label>
+          <label for="registerFirstName">First name</label>
           <input id="registerFirstName" name="register_first_name" type="text" required />
 
-          <label for="registerLastName" data-i18n="auth.lastNameLabel">Last name</label>
+          <label for="registerLastName">Last name</label>
           <input id="registerLastName" name="register_last_name" type="text" required />
 
-          <label for="registerPhone" data-i18n="auth.phoneLabel">Phone number</label>
+          <label for="registerPhone">Phone number</label>
           <div class="phone-field">
             <button
               id="registerCountryBtn"
@@ -343,23 +348,23 @@
               aria-expanded="false"
               aria-controls="registerCountryList"
             >
-              <span id="registerCountryText"><img class="flag-icon" src="https://flagcdn.com/24x18/ir.png" width="24" height="18" alt="Iran flag" /> +98 Iran</span>
+              <span id="registerCountryText">🇮🇷 +98 Iran</span>
             </button>
             <ul id="registerCountryList" class="country-list" role="listbox" hidden></ul>
             <input id="registerPhone" name="register_phone" type="tel" inputmode="numeric" placeholder="Phone number" required />
             <input id="registerCountryCode" name="register_country_code" type="hidden" value="+98" />
           </div>
 
-          <label for="registerEmail" data-i18n="auth.emailRegisterLabel">Email register</label>
+          <label for="registerEmail">Email register</label>
           <input id="registerEmail" name="register_email" type="email" required />
 
-          <label for="registerPassword" data-i18n="auth.passwordLabel">Password</label>
+          <label for="registerPassword">Password</label>
           <input id="registerPassword" name="register_password" type="password" required />
 
-          <label for="registerRepeatPassword" data-i18n="auth.repeatPasswordLabel">Repeat password</label>
+          <label for="registerRepeatPassword">Repeat password</label>
           <input id="registerRepeatPassword" name="register_repeat_password" type="password" required />
 
-          <button type="submit" class="order-submit" data-i18n="auth.registerTitle">Register</button>
+          <button type="submit" class="order-submit">Register</button>
         </form>
       </section>
     </div>

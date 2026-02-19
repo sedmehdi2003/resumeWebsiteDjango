@@ -17,12 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
-from core import views
+
+from core.views import core
+from accounts.views import AdminPanel
 from orders.views import ordersList
 
 urlpatterns = [
     path("", RedirectView.as_view(pattern_name="home", permanent=False)),
-    path("home/", views.core, name="home"),
+    path("home/", core, name="home"),
     path("admin/", admin.site.urls),
-    path("orders/", ordersList)
+    path("admin-panel/", AdminPanel.as_view()),
+    path("orders/", ordersList),
 ]
